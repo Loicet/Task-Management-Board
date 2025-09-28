@@ -58,39 +58,53 @@
                     <span id="count-all" class="text-sm">0</span>
                 </button>
             </nav>
+
+            <!-- Theme Toggle -->
+            <button id="toggleTheme" class="mt-5 py-2 px-3 bg-gray-200 dark:bg-gray-700 rounded text-sm">🌙 Toggle
+                Theme</button>
+        </aside>
+
+        <!-- Main Section -->
+        <main class="flex-1 flex flex-col">
+
             <!-- Header -->
-            <header class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-                <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Task Management Dashboard</h1>
-                <button id="toggleTheme" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full">🌙</button>
+            <header class="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700">
+                <h1 id="currentCategory" class="text-xl font-bold text-gray-800 dark:text-gray-100">All Tasks</h1>
+                <button id="addTaskBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">+
+                    New Task</button>
             </header>
 
-            <!-- Add Task Form -->
-            <section class="p-6">
-                <form id="taskForm" class="flex flex-col sm:flex-row gap-3">
-                    <input type="text" id="taskName" placeholder="Task name..."
-                        class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none" />
-                    <input type="date" id="taskDate"
-                        class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none" />
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
-                        Add Task
-                    </button>
-                </form>
-            </section>
-
-            <!-- Filters -->
-            <section class="px-6 flex gap-4 mb-4">
-                <button class="filterBtn px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700"
-                    data-filter="all">All</button>
-                <button class="filterBtn px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700"
-                    data-filter="pending">Pending</button>
-                <button class="filterBtn px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700"
-                    data-filter="completed">Completed</button>
+            <!-- Progress -->
+            <section class="px-5 py-3">
+                <div class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full">
+                    <div id="progressBar" class="bg-green-500 h-3 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="progressText" class="text-sm mt-1 text-gray-600 dark:text-gray-300">0 of 0 tasks completed</p>
             </section>
 
             <!-- Task List -->
-            <section id="taskList" class="p-6 space-y-3">
-                <!-- Tasks will be dynamically injected here -->
+            <section id="taskList" class="flex-1 p-5 space-y-3 overflow-y-auto">
+                <!-- Tasks will be shown here -->
             </section>
+        </main>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow">
+            <h2 class="text-lg font-semibold mb-4">Add Task</h2>
+            <form id="taskForm" class="space-y-3">
+                <input id="taskName" type="text" placeholder="Task name"
+                    class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
+                <input id="taskDate" type="date" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="closeModal"
+                        class="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded">Cancel</button>
+                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+        </section>
 
     </div>
 
