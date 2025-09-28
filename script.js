@@ -75,3 +75,66 @@ function toggleStatus(id) {
     saveTasks();
     renderTasks();
 }
+// Delete Task
+function deleteTask(id) {
+    if (confirm("Delete this task?")) {
+        tasks = tasks.filter(t => t.id !== id);
+        saveTasks();
+        renderTasks();
+    }
+}
+
+// Add New Task
+taskForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    if (taskName.value.trim() === "") {
+        alert("Task name cannot be empty");
+        return;
+    }
+
+    const newTask = {
+        id: tasks.length ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+        name: taskName.value.trim(),
+        date: taskDate.value,
+        category: currentCategory === "all" ? "myday" : currentCategory,
+        status: "pending"
+    };
+
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    taskForm.reset();
+    taskModal.style.display = "none";
+});
+
+// Modal Controls
+addTaskBtn.addEventListener("click", () => taskModal.classList.remove("hidden"));
+closeModal.addEventListener("click", () => taskModal.classList.add("hidden"));
+
+// Sidebar Navigation
+document.querySelectorAll(".navBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        currentCategory = btn.dataset.category;
+        categoryTitle.textContent = btn.textContent.trim();
+        renderTasks();
+    });
+});
+
+// Save & Load from localStorage
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+function loadTasks() {
+    const saved = localStorage.getItem("tasks");
+    if (saved) tasks = JSON.parse(saved);
+}
+
+// Theme Toggle
+document.getElementById("toggleTheme").addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+});
+
+// Initialize
+loadTasks();
+renderTasks();
