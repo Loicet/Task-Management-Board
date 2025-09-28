@@ -69,3 +69,9 @@ function updateCounts() {
     });
     document.getElementById("count-all").textContent = tasks.length;
 }
+// Toggle Complete / Incomplete
+function toggleStatus(id) {
+    tasks = tasks.map(t => t.id === id ? { ...t, status: t.status === "pending" ? "completed" : "pending" } : t);
+    saveTasks();
+    renderTasks();
+}
