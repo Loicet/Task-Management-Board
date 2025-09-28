@@ -6,106 +6,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Management Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cream': '#E8D5C4',
+                        'brown': '#6B4E37',
+                        'burgundy': '#722F37'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(232, 213, 196, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(45deg, #6B4E37, #722F37); border-radius: 10px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .slide-in { animation: slideIn 0.3s ease-out; }
+    </style>
 </head>
 
-<body class="bg-gradient-to-r from-slate-800 to-slate-900 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-burgundy via-brown to-burgundy min-h-screen p-2 sm:p-4 font-sans">
+
+    <!-- Progress Bar -->
+    <div class="w-full max-w-6xl mx-auto mb-4">
+        <div class="bg-black/20 backdrop-blur-sm rounded-full h-3 overflow-hidden shadow-lg">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-cream via-white to-cream transition-all duration-700 rounded-full shadow-inner" style="width: 0%"></div>
+        </div>
+        <p id="progressText" class="text-cream/90 text-sm mt-2 text-center font-semibold drop-shadow-sm">0 of 0 tasks completed</p>
+    </div>
 
     <!-- Main Container -->
-    <div
-        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col sm:flex-row">
+    <div class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 w-full max-w-6xl mx-auto overflow-hidden flex flex-col lg:flex-row min-h-[85vh]">
+        
         <!-- Sidebar -->
-        <aside class="bg-gray-100 dark:bg-gray-900 w-full sm:w-64 p-5 flex flex-col">
+        <aside class="bg-gradient-to-b from-cream/40 via-cream/20 to-brown/10 backdrop-blur-md w-full lg:w-80 p-6 flex flex-col border-r border-brown/20 relative">
+            <!-- Decorative Background -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-burgundy/10 rounded-full -translate-y-16 translate-x-16"></div>
+            <div class="absolute bottom-0 left-0 w-24 h-24 bg-brown/10 rounded-full translate-y-12 -translate-x-12"></div>
+            
             <!-- User Info -->
-            <div class="flex items-center gap-3 mb-8">
-                <img src="" alt="" class="w-12 h-12 rounded-full border">
+            <div class="relative flex items-center gap-4 mb-8 p-5 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-cream/60 hover:shadow-xl hover:scale-105 transition-all duration-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-burgundy via-brown to-burgundy rounded-full flex items-center justify-center shadow-lg relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent"></div>
+                    <span class="text-white font-bold text-xl relative z-10">LT</span>
+                </div>
                 <div>
-                    <h2 class="text-gray-800 dark:text-gray-100 font-semibold">Loice Teta</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">loiceteta8@gmail.com</p>
+                    <h2 class="text-brown font-bold text-lg mb-1">Loice Teta</h2>
+                    <p class="text-brown/70 text-sm">loiceteta8@gmail.com</p>
                 </div>
             </div>
 
             <!-- Navigation -->
-            <nav class="space-y-2 flex-1">
-                <button
-                    class="navBtn w-full flex justify-between items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                    data-category="myday">
-                    <span> My Day</span>
-                    <span id="count-myday" class="text-sm">0</span>
+            <nav class="space-y-3 flex-1 relative z-10">
+                <button class="navBtn w-full flex justify-between items-center p-4 rounded-xl hover:bg-white/60 hover:shadow-md transition-all duration-300 border border-transparent hover:border-cream/60 group hover:scale-105 hover:-translate-y-1" data-category="myday">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+                        <span class="font-semibold text-brown group-hover:text-burgundy transition-colors duration-300">My Day</span>
+                    </div>
+                    <span id="count-myday" class="bg-gradient-to-r from-burgundy to-brown text-white text-xs px-3 py-1 rounded-full font-bold min-w-[28px] text-center shadow-md">0</span>
                 </button>
-                <button
-                    class="navBtn w-full flex justify-between items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                    data-category="important">
-                    <span> Important</span>
-                    <span id="count-important" class="text-sm">0</span>
+                
+                <button class="navBtn w-full flex justify-between items-center p-4 rounded-xl hover:bg-white/60 hover:shadow-md transition-all duration-300 border border-transparent hover:border-cream/60 group hover:scale-105 hover:-translate-y-1" data-category="important">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+                        <span class="font-semibold text-brown group-hover:text-burgundy transition-colors duration-300">Important</span>
+                    </div>
+                    <span id="count-important" class="bg-gradient-to-r from-burgundy to-brown text-white text-xs px-3 py-1 rounded-full font-bold min-w-[28px] text-center shadow-md">0</span>
                 </button>
-                <button
-                    class="navBtn w-full flex justify-between items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                    data-category="planned">
-                    <span> Planned</span>
-                    <span id="count-planned" class="text-sm">0</span>
+                
+                <button class="navBtn w-full flex justify-between items-center p-4 rounded-xl hover:bg-white/60 hover:shadow-md transition-all duration-300 border border-transparent hover:border-cream/60 group hover:scale-105 hover:-translate-y-1" data-category="planned">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+                        <span class="font-semibold text-brown group-hover:text-burgundy transition-colors duration-300">Planned</span>
+                    </div>
+                    <span id="count-planned" class="bg-gradient-to-r from-burgundy to-brown text-white text-xs px-3 py-1 rounded-full font-bold min-w-[28px] text-center shadow-md">0</span>
                 </button>
-                <button
-                    class="navBtn w-full flex justify-between items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                    data-category="shared">
-                    <span> Shared</span>
-                    <span id="count-shared" class="text-sm">0</span>
+                
+                <button class="navBtn w-full flex justify-between items-center p-4 rounded-xl hover:bg-white/60 hover:shadow-md transition-all duration-300 border border-transparent hover:border-cream/60 group hover:scale-105 hover:-translate-y-1" data-category="shared">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+                        <span class="font-semibold text-brown group-hover:text-burgundy transition-colors duration-300">Shared</span>
+                    </div>
+                    <span id="count-shared" class="bg-gradient-to-r from-burgundy to-brown text-white text-xs px-3 py-1 rounded-full font-bold min-w-[28px] text-center shadow-md">0</span>
                 </button>
-                <button
-                    class="navBtn w-full flex justify-between items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                    data-category="all">
-                    <span> All Tasks</span>
-                    <span id="count-all" class="text-sm">0</span>
+                
+                <button class="navBtn w-full flex justify-between items-center p-4 rounded-xl hover:bg-white/60 hover:shadow-md transition-all duration-300 border border-transparent hover:border-cream/60 group hover:scale-105 hover:-translate-y-1" data-category="all">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+                        <span class="font-semibold text-brown group-hover:text-burgundy transition-colors duration-300">All Tasks</span>
+                    </div>
+                    <span id="count-all" class="bg-gradient-to-r from-burgundy to-brown text-white text-xs px-3 py-1 rounded-full font-bold min-w-[28px] text-center shadow-md">0</span>
                 </button>
             </nav>
 
             <!-- Theme Toggle -->
-            <button id="toggleTheme" class="mt-5 py-2 px-3 bg-gray-200 dark:bg-gray-700 rounded text-sm">🌙 Toggle
-                Theme</button>
+            <button id="toggleTheme" class="relative mt-6 py-3 px-6 bg-gradient-to-r from-brown to-burgundy hover:from-burgundy hover:to-brown text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-pulse"></div>
+                <span class="relative z-10"> Toggle Theme</span>
+            </button>
         </aside>
 
         <!-- Main Section -->
-        <main class="flex-1 flex flex-col">
+        <main class="flex-1 flex flex-col bg-gradient-to-br from-white/50 to-cream/20">
 
             <!-- Header -->
-            <header class="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700">
-                <h1 id="currentCategory" class="text-xl font-bold text-gray-800 dark:text-gray-100">All Tasks</h1>
-                <button id="addTaskBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">+
-                    New Task</button>
+            <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 border-b border-brown/20 bg-gradient-to-r from-cream/30 via-white/40 to-cream/30 backdrop-blur-sm relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+                <h1 id="currentCategory" class="relative text-3xl font-bold text-brown mb-4 sm:mb-0 drop-shadow-sm">All Tasks</h1>
+                <button id="addTaskBtn" class="relative bg-gradient-to-r from-burgundy via-brown to-burgundy hover:from-brown hover:via-burgundy hover:to-brown text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-bounce-slow"></div>
+                    <span class="relative z-10"> New Task</span>
+                </button>
             </header>
 
-            <!-- Progress -->
-            <section class="px-5 py-3">
-                <div class="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full">
-                    <div id="progressBar" class="bg-green-500 h-3 rounded-full" style="width: 0%"></div>
-                </div>
-                <p id="progressText" class="text-sm mt-1 text-gray-600 dark:text-gray-300">0 of 0 tasks completed</p>
+            <!-- Add Task Form -->
+            <section class="p-6 bg-gradient-to-r from-white/30 to-cream/20 backdrop-blur-sm">
+                <form id="taskForm" class="flex flex-col lg:flex-row gap-4">
+                    <input type="text" id="taskName" placeholder="What amazing thing will you accomplish today?" class="flex-1 p-4 rounded-2xl border-2 border-cream/60 focus:border-brown/60 bg-white/80 backdrop-blur-sm text-brown placeholder-brown/50 focus:outline-none transition-all duration-300 font-medium shadow-md focus:shadow-lg hover:scale-105 focus:scale-105" />
+                    <input type="date" id="taskDate" class="p-4 rounded-2xl border-2 border-cream/60 focus:border-brown/60 bg-white/80 backdrop-blur-sm text-brown focus:outline-none transition-all duration-300 font-medium shadow-md focus:shadow-lg hover:scale-105 focus:scale-105" />
+                    <button type="submit" class="px-8 py-4 bg-gradient-to-r from-burgundy to-brown hover:from-brown hover:to-burgundy text-white rounded-2xl shadow-lg hover:shadow-2xl font-semibold transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 group-hover:animate-pulse"></div>
+                        <span class="relative z-10">Add Task</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Filters -->
+            <section class="px-6 flex gap-3 mb-4 overflow-x-auto">
+                <button class="filterBtn px-6 py-3 rounded-full bg-cream/60 hover:bg-brown hover:text-white transition-all duration-300 font-semibold whitespace-nowrap border-2 border-brown/20 hover:border-brown shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105" data-filter="all">All</button>
+                <button class="filterBtn px-6 py-3 rounded-full bg-cream/60 hover:bg-brown hover:text-white transition-all duration-300 font-semibold whitespace-nowrap border-2 border-brown/20 hover:border-brown shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105" data-filter="pending">Pending</button>
+                <button class="filterBtn px-6 py-3 rounded-full bg-cream/60 hover:bg-brown hover:text-white transition-all duration-300 font-semibold whitespace-nowrap border-2 border-brown/20 hover:border-brown shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105" data-filter="completed">Completed</button>
             </section>
 
             <!-- Task List -->
-            <section id="taskList" class="flex-1 p-5 space-y-3 overflow-y-auto">
-                <!-- Tasks will be shown here -->
+            <section id="taskList" class="p-6 space-y-4 flex-1 overflow-y-auto">
+                <!-- Tasks will be dynamically injected here -->
+                <div class="text-center text-brown/60 py-16 relative">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-5">
+                        <div class="text-9xl"></div>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="text-6xl mb-6 animate-bounce-slow"></div>
+                        <p class="text-xl font-bold mb-2 text-brown">Ready to be productive?</p>
+                        <p class="text-lg text-brown/70">Create your first task and start achieving your goals!</p>
+                    </div>
+                </div>
             </section>
         </main>
-    </div>
-
-    <!-- Task Modal -->
-    <div id="taskModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow">
-            <h2 class="text-lg font-semibold mb-4">Add Task</h2>
-            <form id="taskForm" class="space-y-3">
-                <input id="taskName" type="text" placeholder="Task name"
-                    class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
-                <input id="taskDate" type="date" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
-                <div class="flex justify-end gap-2">
-                    <button type="button" id="closeModal"
-                        class="bg-gray-300 dark:bg-gray-600 px-3 py-1 rounded">Cancel</button>
-                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Save</button>
-                </div>
-            </form>
-        </div>
-        </section>
-
     </div>
 
     <script src="script.js"></script>
