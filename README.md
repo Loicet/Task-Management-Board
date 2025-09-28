@@ -53,6 +53,8 @@ Task-Management-Board/
 
 Project's screenshot ![Project's screenshot](image.png)
 
+Deployed link: https://loicet.github.io/Task-Management-Board/
+
 **AUTHOR**
 Loice Teta
 
