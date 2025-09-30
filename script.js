@@ -73,13 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const div = document.createElement("div");
                 const overdue = task.status === "pending" && isOverdue(task.date);
 
-                div.className = `group relative p-5 rounded-2xl shadow-lg border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                    task.status === "completed" 
-                        ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200/50 opacity-75" 
+                div.className = `group relative p-5 rounded-2xl shadow-lg border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${task.status === "completed"
+                        ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200/50 opacity-75"
                         : overdue
-                        ? "bg-gradient-to-r from-red-50 to-pink-50 border-red-200/50"
-                        : "bg-gradient-to-r from-white to-cream/30 border-brown/20 hover:border-brown/40"
-                }`;
+                            ? "bg-gradient-to-r from-red-50 to-pink-50 border-red-200/50"
+                            : "bg-gradient-to-r from-white to-cream/30 border-brown/20 hover:border-brown/40"
+                    }`;
 
                 div.innerHTML = `
                     <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -102,17 +101,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="flex gap-2 self-start">
                             <button 
-                                class="px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${
-                                    task.status === "pending" 
-                                        ? "bg-green-500 hover:bg-green-600 text-white" 
-                                        : "bg-amber-500 hover:bg-amber-600 text-white"
-                                }"
+                                class="px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 ${task.status === "pending"
+                        ? "bg-rose-900 hover:bg-rose-900 text-white"
+                        : "bg-amber-500 hover:bg-amber-600 text-white"
+                    }"
                                 data-action="toggle" data-id="${task.id}"
                             >
                                 ${task.status === "pending" ? "✓ Complete" : "↺ Undo"}
                             </button>
+                                  <button 
+                                class="px-5 py-2 bg-cyan-600 hover:bg-cyan-600 text-white rounded-xl text-xs font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                                data-action="edit" data-id="${task.id}"
+                            >
+                                 Edit
+                            </button>
                             <button 
-                                class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                                class="px-3 py-2 bg-red-600 hover:bg-red-600 text-white rounded-xl text-xs font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                                 data-action="delete" data-id="${task.id}"
                             >
                                  Delete
@@ -161,9 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Toggle Complete / Incomplete
     function toggleStatus(id) {
-        tasks = tasks.map(t => t.id === id ? { 
-            ...t, 
-            status: t.status === "pending" ? "completed" : "pending" 
+        tasks = tasks.map(t => t.id === id ? {
+            ...t,
+            status: t.status === "pending" ? "completed" : "pending"
         } : t);
         saveTasks();
         renderTasks();
@@ -171,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Add some visual feedback
         const task = tasks.find(t => t.id === id);
         if (task && task.status === "completed") {
-            showNotification("Task completed! 🎉", "success");
+            showNotification("Task completed! ", "success");
         }
     }
 
@@ -336,7 +340,25 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (btn.getAttribute("data-action") === "delete") {
             deleteTask(id);
         }
+        else if (btn.getAttribute("data-action") === "edit") {
+            editTask(id);
+        }
     });
+
+    function editTask(id) {
+        const t = tasks.find(t => t.id === id);
+        const newTaskName = prompt("Enter your new task", t.name);
+        const newDate = prompt("Enter new date", t.date);
+
+        if (newTaskName) {
+            t.name = newTaskName;
+        }
+       if (newDate){
+        t.date = newDate
+       }
+        renderTasks();
+    }
+
 
     // Auto-save when page unloads
     window.addEventListener("beforeunload", saveTasks);
